@@ -1148,10 +1148,10 @@ require('lazy').setup({
       vim.g.VM_add_cursor_at_pos_no_mappings = 1
     end,
   },
-  {
-    'wakatime/vim-wakatime',
-    lazy = false,
-  },
+  -- {
+  --   'wakatime/vim-wakatime',
+  --   lazy = false,
+  -- },
   {
     'nvim-neotest/neotest',
     dependencies = {
