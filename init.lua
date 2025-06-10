@@ -1239,21 +1239,55 @@ require('lazy').setup({
           },
         },
         pyright = {
-          cmd = { 'pyright-langserver', '--stdio' },
-          filetypes = { 'python' },
-          capabilities = {
-            offsetEncoding = { 'utf-8', 'utf-16' },
+          capabilities = vim.tbl_deep_extend(
+            'force',
+            vim.lsp.protocol.make_client_capabilities(),
+            {
+              textDocument = {
+                foldingRange = {
+                  lineFoldingOnly = true,
+                },
+                rangeFormatting = {
+                  dynamicRegistration = true,
+                },
+              },
+              -- Move positionEncoding to the top level, not under textDocument
+              positionEncoding = 'utf-16', -- Pyright prefers UTF-16
+            }
+          ),
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = "basic", -- or "strict" if you prefer
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+            },
           },
-          root_dir = {
-            -- This is a list of patterns that will be used to find the root directory
-            --  for the current file. The first pattern that matches will be used.
+          root_dir = require('lspconfig.util').root_pattern(
             '.git',
-            '.pyrightconfig.json',
+            '.pyrightconfig.json', 
             'setup.py',
             'setup.cfg',
-            'pyproject.toml',
-          },
+            'pyproject.toml'
+          ),
         },
+               -- pyright = {
+        --   cmd = { 'pyright-langserver', '--stdio' },
+        --   filetypes = { 'python' },
+        --   capabilities = {
+        --     offsetEncoding = { 'utf-8', 'utf-16' },
+        --   },
+        --   root_dir = {
+        --     -- This is a list of patterns that will be used to find the root directory
+        --     --  for the current file. The first pattern that matches will be used.
+        --     '.git',
+        --     '.pyrightconfig.json',
+        --     'setup.py',
+        --     'setup.cfg',
+        --     'pyproject.toml',
+        --   },
+        -- },
         rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -1596,6 +1630,15 @@ require('lazy').setup({
   --   'wakatime/vim-wakatime',
   --   lazy = false,
   -- },
+  {
+      'MeanderingProgrammer/render-markdown.nvim',
+      dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+      ---@module 'render-markdown'
+      ---@type render.md.UserConfig
+      opts = {},
+  },
   {
     'nvim-neotest/neotest',
     dependencies = {
