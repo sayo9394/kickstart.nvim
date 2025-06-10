@@ -166,6 +166,8 @@ vim.o.confirm = true
 
 vim.opt.smartindent = true
 
+vim.opt.smartindent = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
